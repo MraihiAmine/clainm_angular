@@ -1,0 +1,100 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="flex flex-col shadow bg-card">
+        <!-- Cover image -->
+        <div>
+            <img
+                class="h-40 lg:h-80 object-cover"
+                src="assets/images/pages/profile/cover.jpg"
+                alt="Cover image"
+            />
+        </div>
+
+        <!-- User info -->
+        <div
+            class="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-8 lg:h-18 bg-card"
+        >
+            <!-- Avatar -->
+            <div class="-mt-26 lg:-mt-22 rounded-full">
+                <img
+                    class="w-32 h-32 rounded-full ring-4 ring-bg-card"
+                    *ngIf="user && user.photo"
+                    [src]="'http://localhost:3000/users/images/' + user.photo"
+                    alt="User Photo"
+                />
+            </div>
+
+            <!-- Details -->
+            <div
+                class="flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8"
+            >
+                <div
+                    *ngIf="this.user.username"
+                    class="text-lg font-bold leading-none"
+                >
+                    {{ user.username }}
+                </div>
+                <div *ngIf="this.user.address" class="text-secondary">
+                    {{ this.user.address }}
+                </div>
+            </div>
+
+            <!-- Separator -->
+            <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
+            <!-- Stats -->
+
+            <!-- Menu -->
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div
+        class="flex flex-auto justify-center w-full max-w-5xl mx-auto p-6 sm:p-8"
+    >
+        <!-- Column -->
+        <div
+            class="sm:col-span-2 lg:col-span-3 flex flex-col flex-auto bg-card shadow rounded-2xl p-4"
+        >
+            <!-- About me -->
+            <fuse-card
+                class="sm:col-span-2 lg:col-span-3 flex flex-col flex-auto bg-card shadow rounded-2xl p-4"
+            >
+                <div class="text-2xl font-semibold leading-tight">About Me</div>
+                <div *ngIf="user.aboutMe" class="mt-4">
+                    {{ user.aboutMe }}
+                </div>
+                <hr class="w-full border-t my-6" />
+                <div class="flex flex-col">
+                    <div *ngIf="user.address" class="flex items-center">
+                        <mat-icon
+                            class="icon-size-5 mr-3"
+                            [svgIcon]="'heroicons_solid:map-pin'"
+                        ></mat-icon>
+                        <span class="leading-none">{{ user.address }}</span>
+                    </div>
+                    <div *ngIf="user.role" class="flex items-center mt-4">
+                        <mat-icon
+                            class="icon-size-5 mr-3"
+                            [svgIcon]="'heroicons_solid:briefcase'"
+                        ></mat-icon>
+                        <span class="leading-none">Role: {{ user.role }}</span>
+                    </div>
+                    <div *ngIf="user.email" class="flex items-center mt-4">
+                        <mat-icon
+                            class="icon-size-5 mr-3"
+                            [svgIcon]="'heroicons_solid:archive-box'"
+                        ></mat-icon>
+                        <span class="leading-none"
+                            >Email: {{ user.email }}</span
+                        >
+                    </div>
+                </div>
+            </fuse-card>
+
+            <!-- News -->
+
+            <!-- Activity Feed -->
+        </div>
+    </div>
+</div>
