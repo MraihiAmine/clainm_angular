@@ -1,0 +1,73 @@
+<div class="flex flex-col flex-auto w-full">
+    <mat-form-field class="flex items-center justify-between w-full">
+        <input
+            matInput
+            (keyup)="applyFilter($event.target.value)"
+            placeholder="Search claim"
+        />
+    </mat-form-field>
+
+    <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+                >Name</mat-header-cell
+            >
+            <mat-cell *matCellDef="let reclamation">{{
+                reclamation.name
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+                >Description</mat-header-cell
+            >
+            <mat-cell *matCellDef="let reclamation">{{
+                reclamation.description
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+            <mat-header-cell *matHeaderCellDef mat-sort-header
+                >State</mat-header-cell
+            >
+            <mat-cell *matCellDef="let reclamation">{{
+                reclamation.state
+            }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+            <mat-cell *matCellDef="let reclamation">
+                <button
+                    mat-icon-button
+                    (click)="openReclamationDetails(reclamation)"
+                >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                    mat-icon-button
+                    (click)="deleteReclamation(reclamation)"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+    <mat-paginator
+        #paginator
+        [pageSizeOptions]="[2, 10, 25]"
+        showFirstLastButtons
+    ></mat-paginator>
+    <div class="add-button-container">
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="openReclamationDetails(null)"
+        >
+            Add Claim
+        </button>
+    </div>
+</div>

@@ -75,10 +75,14 @@ export class AuthService {
                     
                     // Store the user on the user service
                     this._userService.user = response.user; */
-                    
+
                     localStorage.setItem('user', JSON.stringify(response.user));
-                    localStorage.setItem('navigation', JSON.stringify(response.navigation));
-                    
+                    localStorage.setItem('accessToken', response.jwtToken);
+                    localStorage.setItem(
+                        'navigation',
+                        JSON.stringify(response.navigation)
+                    );
+
                     // Return a new observable with the response
                     this._authenticated = true;
                     return of(response);
@@ -218,6 +222,7 @@ export class AuthService {
         }
 
         // If the access token exists, and it didn't expire, sign in using it
-        return this.signInUsingToken();
+        return of(true);
+        //return this.signInUsingToken();
     }
 }

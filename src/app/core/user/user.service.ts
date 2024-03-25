@@ -16,6 +16,18 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+    addUser(updatedUser: any): Observable<any> {
+        // Update the user on the server using HTTP PUT
+        const apiUrl = `http://localhost:9000/registerNewUser`;
+
+        return this._httpClient.post(apiUrl, updatedUser).pipe(
+            catchError((error) => {
+                // Handle the error (e.g., log or display a message)
+                console.error('Failed to update user on the server:', error);
+                return throwError(error);
+            })
+        );
+    }
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
 
     // -----------------------------------------------------------------------------------------------------
@@ -33,8 +45,8 @@ export class UserService {
     }
 
     get user$(): Observable<User> {
-        return this.getUserById(localStorage.getItem('userId'));
-        // return this._user.asObservable();
+        // return this.getUserById(localStorage.getItem('userId'));
+        return this._user.asObservable();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -97,24 +109,11 @@ export class UserService {
         return this._httpClient.put(endpoint, formData);
     }
 
-    updateUser(updatedUser: any, file = null): Observable<any> {
-        const updatedUserId = updatedUser.id;
-        const formData = new FormData();
-
-        // Loop through updatedUser properties and append them to the formData
-        for (const key in updatedUser) {
-            if (updatedUser[key] !== null && updatedUser[key] !== undefined) {
-                formData.append(key, updatedUser[key]);
-            }
-        }
-        if (file) {
-            formData.append('photo', file);
-        }
-
+    updateUser(updatedUser: any): Observable<any> {
         // Update the user on the server using HTTP PUT
-        const apiUrl = `http://localhost:3000/users/update/${updatedUserId}`;
+        const apiUrl = `http://localhost:9000/updateUser`;
 
-        return this._httpClient.put(apiUrl, formData).pipe(
+        return this._httpClient.put(apiUrl, updatedUser).pipe(
             catchError((error) => {
                 // Handle the error (e.g., log or display a message)
                 console.error('Failed to update user on the server:', error);
@@ -162,7 +161,7 @@ export class UserService {
     }
 
     getUsers(): Observable<User[]> {
-        return this._httpClient.get<User[]>('http://localhost:3000/users').pipe(
+        return this._httpClient.get<User[]>('http://localhost:9000/users').pipe(
             tap((users) => {
                 this._users.next(users);
             })

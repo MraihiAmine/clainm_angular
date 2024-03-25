@@ -1,16 +1,23 @@
-
 export interface User {
     aboutMe?: any;
     status?: string;
     id?: number;
     address?: string;
     photo?: string;
-    evaltypeId?: string;
-    startupId?: string;
-    username: string;
+    userFirstName?: string;
+    userLastName?: string;
+    userName?: string;
+    username?: string;
     email: string;
     password?: string;
-    role: string;
-    isActive?: boolean;
+    userPassword?: string;
+    role: Role[];
+    active?: any;
     isEditMode?: boolean;
+}
+
+export interface Role {
+    id?: string;
+    roleName?: string;
+    roleDescription?: string;
 }

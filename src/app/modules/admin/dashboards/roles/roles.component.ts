@@ -54,13 +54,13 @@ import {
 import { UserService } from 'app/core/user/user.service';
 import { Role, User } from 'app/core/user/user.types';
 import { MatDialog } from '@angular/material/dialog';
-import { UserDetails } from './details/details.component';
+import { DetailsComponent } from './details/details.component';
 import { RoleService } from 'app/core/role/role.service';
 import _ from 'lodash';
 
 @Component({
-    selector: 'user',
-    templateUrl: './users.component.html',
+    selector: 'role',
+    templateUrl: './roles.component.html',
     styles: [
         /* language=SCSS */
         `
@@ -122,19 +122,14 @@ import _ from 'lodash';
         CurrencyPipe,
     ],
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class RolesComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
     selectedFileName: string | undefined;
     users$: Observable<User[]>;
 
     dataSource: MatTableDataSource<any>;
-    displayedColumns: string[] = [
-        'userName',
-        'userFirstName',
-        'userLastName',
-        'actions',
-    ];
+    displayedColumns: string[] = ['Role', 'Description', 'actions'];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -162,8 +157,8 @@ export class UserComponent implements OnInit, OnDestroy {
         private _userService: UserService,
         private _roleService: RoleService
     ) {
-        this._userService.getUsers().subscribe((users) => {
-            this.dataSource = new MatTableDataSource(users);
+        this._roleService.getRoles().subscribe((roles) => {
+            this.dataSource = new MatTableDataSource(roles);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         });
@@ -183,36 +178,23 @@ export class UserComponent implements OnInit, OnDestroy {
         });
     }
 
-    openModal(user: User) {
+    openModal(role: Role) {
         const dataToSend = {
-            userFirstName: user.userFirstName,
-            userLastName: user.userLastName,
-            email: user.email,
-            active: user.active,
-            userRoles: user.role,
-            roles: this.roles,
+            roleDescription: role.roleDescription,
         };
 
         this._matDialog
-            .open(UserDetails, {
+            .open(DetailsComponent, {
                 autoFocus: false,
                 data: dataToSend,
             })
             .afterClosed()
-            .subscribe((res: User) => {
+            .subscribe((res: Role) => {
                 if (res) {
-                    const userRolesTmp = this.roles.filter(
-                        (elt) => res[elt.roleName]
-                    );
-                    user.role = userRolesTmp;
+                    role.roleDescription = res.roleDescription;
 
-                    user.active = +res.active;
-                    user.email = res.email;
-                    user.userFirstName = res.userFirstName;
-                    user.userLastName = res.userLastName;
-
-                    this._userService
-                        .updateUser(user)
+                    this._roleService
+                        .updateRole(role)
                         .subscribe((updatedRes) => {
                             this.dataSource = new MatTableDataSource(
                                 updatedRes
@@ -224,34 +206,24 @@ export class UserComponent implements OnInit, OnDestroy {
             });
     }
 
-    addUser() {
+    addRole() {
         let dataToSend = {
-            roles: this.roles,
-            addUser: true,
+            addRole: true,
         };
         this._matDialog
-            .open(UserDetails, {
+            .open(DetailsComponent, {
                 autoFocus: false,
                 data: dataToSend,
             })
             .afterClosed()
-            .subscribe((res: User) => {
+            .subscribe((res: Role) => {
                 if (res) {
-                    const userRolesTmp = this.roles.filter(
-                        (elt) => res[elt.roleName]
-                    );
-
-                    let user: User = {
-                        role: userRolesTmp,
-                        userName: res.userName,
-                        active: +res.active,
-                        email: res.email,
-                        userPassword: res.password,
-                        userFirstName: res.userFirstName,
-                        userLastName: res.userLastName,
+                    let role: Role = {
+                        roleDescription: res.roleDescription,
+                        roleName: res.roleName,
                     };
 
-                    this._userService.addUser(user).subscribe((updatedRes) => {
+                    this._roleService.addRole(role).subscribe((updatedRes) => {
                         this.dataSource = new MatTableDataSource(updatedRes);
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
@@ -260,15 +232,13 @@ export class UserComponent implements OnInit, OnDestroy {
             });
     }
 
-    editUser(user: any) {
-        // Implement edit functionality here
-        console.log('Edit user:', user);
-        this.openModal(user);
+    editRole(role: any) {
+        this.openModal(role);
     }
 
-    deleteUser(user: any) {
+    deleteRole(role: any) {
         // Implement delete functionality here
-        console.log('Delete user:', user);
+        console.log('Delete role:', role);
     }
 
     applyFilter(filterValue: string) {

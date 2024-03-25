@@ -41,11 +41,15 @@ import { User } from 'app/core/user/user.types';
 })
 export class ProfileComponent implements OnInit {
     user: User;
+    userRolesStr: String;
     constructor(private _userService: UserService) {}
     ngOnInit(): void {
         const userId = localStorage.getItem('userId');
-        this._userService.getUserById(userId).subscribe((user) => {
-            this.user = user;
-        });
+        const userStr = localStorage.getItem('user');
+        this.user = JSON.parse(userStr);
+        this.user = JSON.parse(userStr);
+        this.userRolesStr = this.user.role
+            .map((role) => role.roleDescription)
+            .join(', ');
     }
 }

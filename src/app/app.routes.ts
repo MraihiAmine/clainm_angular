@@ -149,6 +149,20 @@ export const appRoutes: Route[] = [
                                 'app/modules/admin/dashboards/Users/users.routes'
                             ),
                     },
+                    {
+                        path: 'role',
+                        loadChildren: () =>
+                            import(
+                                'app/modules/admin/dashboards/roles/roles.routes'
+                            ),
+                    },
+                    {
+                        path: 'claim',
+                        loadChildren: () =>
+                            import(
+                                'app/modules/admin/dashboards/Claim/claim.routes'
+                            ),
+                    },
                 ],
             },
 
@@ -352,7 +366,7 @@ export const appRoutes: Route[] = [
                             import(
                                 'app/modules/admin/pages/profile/profile.routes'
                             ),
-                    }
+                    },
                 ],
             },
 

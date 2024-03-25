@@ -1,0 +1,48 @@
+<div
+    *ngIf="!this.isLoading"
+    class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-160 -m-6 overflow-y-auto"
+>
+    <!-- Header -->
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium">Role details</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <form
+        class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
+        [formGroup]="rolesForm"
+    >
+        <!-- Username -->
+        <mat-form-field
+            *ngIf="data.addRole"
+            class="w-full"
+            [subscriptSizing]="'dynamic'"
+        >
+            <mat-label>Role name</mat-label>
+            <input matInput formControlName="roleName" />
+        </mat-form-field>
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Role description</mat-label>
+            <input matInput formControlName="roleDescription" />
+        </mat-form-field>
+    </form>
+</div>
+<form (ngSubmit)="submitForm()">
+    <!-- Your form controls here -->
+    <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!rolesForm.valid"
+    >
+        Submit
+    </button>
+</form>

@@ -31,18 +31,23 @@ export class NavigationService {
     /**
      * Get all navigation data
      */
-/*     get() {
+    /*     get() {
         this._navigation = JSON.parse(localStorage.getItem('navigation'));
         return of(this._navigation);
     } */
 
-    get(): Observable<Navigation>
-    {
+    get(): Observable<Navigation> {
         return this._httpClient.get<Navigation>('api/common/navigation').pipe(
-            tap((navigation) =>
-            {
-                this._navigation.next(navigation);
-            }),
+            tap((navigation) => {
+                const navigationByUserStr = localStorage.getItem('navigation');
+                const navigationByUser = JSON.parse(navigationByUserStr);
+                let finalNavigation: Navigation = navigationByUser;
+                finalNavigation.compact = navigationByUser.compact;
+                finalNavigation.default = navigationByUser.defaultItems;
+                finalNavigation.futuristic = navigationByUser.futuristic;
+                finalNavigation.horizontal = navigationByUser.horizontal;
+                this._navigation.next(finalNavigation);
+            })
         );
     }
 }

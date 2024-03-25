@@ -23,7 +23,7 @@ export class AuthUtils {
      */
     static isTokenExpired(token: string, offsetSeconds?: number): boolean {
         // Return if there is no token
-        if (!eval(token)) {
+        if (!token) {
             return true;
         }
 
@@ -140,7 +140,7 @@ export class AuthUtils {
      */
     private static _decodeToken(token: string): any {
         // Return if there is no token
-        if (!eval(token)) {
+        if (!(token)) {
             return null;
         }
 

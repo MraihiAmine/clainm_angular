@@ -1,0 +1,104 @@
+<div
+    *ngIf="!this.isLoading"
+    class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-160 -m-6 overflow-y-auto"
+>
+    <!-- Header -->
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium">User details</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <form
+        class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
+        [formGroup]="userForm"
+    >
+        <!-- Username -->
+        <mat-form-field
+            *ngIf="data.addUser"
+            class="w-full"
+            [subscriptSizing]="'dynamic'"
+        >
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="userName" />
+        </mat-form-field>
+
+        <!-- User First Name -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>User First Name</mat-label>
+            <input matInput formControlName="userFirstName" />
+        </mat-form-field>
+
+        <!-- User Last Name -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>User Last Name</mat-label>
+            <input matInput formControlName="userLastName" />
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field
+            *ngIf="data.addUser"
+            class="w-full"
+            [subscriptSizing]="'dynamic'"
+        >
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" />
+        </mat-form-field>
+        <mat-form-field
+            *ngIf="data.addUser"
+            class="w-full"
+            [subscriptSizing]="'dynamic'"
+        >
+            <mat-label>Confirm password</mat-label>
+            <input matInput formControlName="passwordConfirm" />
+        </mat-form-field>
+
+        <mat-error
+            *ngIf="
+                data.addUser &&
+                userForm.get('passwordConfirm').hasError('mustMatch')
+            "
+        >
+            Passwords must match
+        </mat-error>
+
+        <!-- Active -->
+        <mat-checkbox formControlName="active">Active</mat-checkbox>
+
+        <div>
+            <ng-container *ngFor="let role of data.roles; let i = index">
+                <mat-checkbox [formControlName]="role.roleName">{{
+                    role.roleName
+                }}</mat-checkbox>
+            </ng-container>
+        </div>
+
+        <!-- Labels -->
+        <div class="w-full">
+            <!-- Labels code here... -->
+        </div>
+    </form>
+</div>
+<form (ngSubmit)="submitForm()">
+    <!-- Your form controls here -->
+    <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!userForm.valid"
+    >
+        Submit
+    </button>
+</form>

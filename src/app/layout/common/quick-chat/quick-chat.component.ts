@@ -126,9 +126,8 @@ export class QuickChatComponent implements OnInit, AfterViewInit, OnDestroy {
         // Chat
 
         const userId = localStorage.getItem('userId');
-        this._userService.getUserById(userId).subscribe((user) => {
-            this.user = user;
-        });
+        const userStr = localStorage.getItem('user');
+        this.user = JSON.parse(userStr);
         this._quickChatService.chat$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((chat: Chat) => {
@@ -170,7 +169,7 @@ export class QuickChatComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((chats: Chat[]) => {
                 this.chats = chats;
                 this.chat = this.chats.find((item) => item.id === this.chat.id);
-                this.messageInput.nativeElement.value = ''
+                this.messageInput.nativeElement.value = '';
             });
     }
 

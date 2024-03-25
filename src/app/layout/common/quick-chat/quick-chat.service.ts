@@ -53,12 +53,19 @@ export class QuickChatService {
             })
         );
     }
-
     getChatsTmp(userId): Observable<any> {
+        return this._httpClient.get<Chat[]>('api/apps/chat/chats').pipe(
+            tap((response: Chat[]) => {
+                this._chats.next(response);
+            })
+        );
+    }
+
+    /*     getChatsTmp(userId): Observable<any> {
         return this._httpClient.get<Chat[]>(
             `http://localhost:3000/messages/${userId}`
         );
-    }
+    } */
     createMessage(transmitterId, receiverId, content): Observable<any> {
         const messageObj = {
             content: content,
