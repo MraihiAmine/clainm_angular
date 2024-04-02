@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Claim } from 'app/modules/admin/dashboards/Claim/claim.type';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class ClaimService {
 
     updateClaim(claim: Claim) {
         return this._httpClient.put<Claim[]>(
-            `http://localhost:9000/reclamations/updateClaim?id=${claim.id}`,
+            `http://localhost:9000/reclamations/updateClaim/${claim.id}`,
             claim
         );
     }
@@ -30,8 +30,14 @@ export class ClaimService {
     }
 
     delelte(id: number) {
-        return this._httpClient.delete<Claim[]>(
-            `http://localhost:9000/reclamations/delete?id=${id}`
+        const headers = new HttpHeaders().set(
+            'Content-Type',
+            'text/plain; charset=utf-8'
+        );
+
+        return this._httpClient.delete<String>(
+            `http://localhost:9000/reclamations/deleteClaim/${id}`,
+            { headers, responseType: 'text' as 'json' }
         );
     }
 }

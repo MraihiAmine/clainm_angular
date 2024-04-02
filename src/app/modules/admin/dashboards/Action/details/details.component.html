@@ -1,0 +1,83 @@
+<div
+    *ngIf="!isLoading"
+    class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-160 -m-6 overflow-y-auto"
+>
+    <!-- Header -->
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium">Action Details</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <!-- Action form -->
+    <form
+        class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
+        [formGroup]="ActionForm"
+    >
+        <!-- Name -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="actionName" />
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" />
+        </mat-form-field>
+
+        <!-- Date Creation -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Date Creation</mat-label>
+            <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="dateCreation"
+            />
+            <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Date Update -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Date Update</mat-label>
+            <input
+                matInput
+                [matDatepicker]="updatePicker"
+                formControlName="dateUpdate"
+            />
+            <mat-datepicker-toggle
+                matSuffix
+                [for]="updatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #updatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- ActionEntities -->
+        <!-- Assuming actionEntities is a list of objects, adjust as needed -->
+
+        <div class="w-full">
+            <!-- ActionEntities code here... -->
+        </div>
+    </form>
+</div>
+<form (ngSubmit)="submitForm()">
+    <!-- Your form controls here -->
+    <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!ActionForm.valid"
+    >
+        Submit
+    </button>
+</form>

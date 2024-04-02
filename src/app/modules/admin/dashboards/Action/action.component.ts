@@ -4,9 +4,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Claim } from './claim.type';
-import { ClaimService } from 'app/core/claim/claim.service';
-import { ClaimDetails } from './details/details.component';
+import { Action } from './action.type';
+import { ActionService } from 'app/core/claim copy/action.service';
+import { ActionDetails } from './details/details.component';
 import {
     NgIf,
     NgFor,
@@ -28,8 +28,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 
 @Component({
-    selector: 'app-reclamation',
-    templateUrl: './claim.component.html',
+    selector: 'app-action',
+    templateUrl: './action.component.html',
     standalone: true,
     styles: [
         /* language=SCSS */
@@ -88,19 +88,19 @@ import { MatSortModule } from '@angular/material/sort';
         CurrencyPipe,
     ],
 })
-export class ReclamationComponent implements OnInit, OnDestroy {
-    dataSource: MatTableDataSource<Claim>;
-    displayedColumns: string[] = ['name', 'description', 'state', 'actions'];
+export class ActionComponent implements OnInit, OnDestroy {
+    dataSource: MatTableDataSource<Action>;
+    displayedColumns: string[] = ['name', 'description', 'actions'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     private unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private dialog: MatDialog,
-        private _claimService: ClaimService
+        private _actionService: ActionService
     ) {}
 
     ngOnInit(): void {
-        this.loadReclamations();
+        this.loadActions();
     }
 
     ngOnDestroy(): void {
@@ -108,55 +108,55 @@ export class ReclamationComponent implements OnInit, OnDestroy {
         this.unsubscribeAll.complete();
     }
 
-    loadReclamations(): void {
-        this._claimService
-            .getClaims()
+    loadActions(): void {
+        this._actionService
+            .getActions()
             .pipe(takeUntil(this.unsubscribeAll))
-            .subscribe((reclamations) => {
-                this.dataSource = new MatTableDataSource<Claim>(reclamations);
+            .subscribe((actions) => {
+                this.dataSource = new MatTableDataSource<Action>(actions);
                 this.dataSource.paginator = this.paginator;
             });
     }
 
-    openReclamationDetails(reclamation: Claim | null): void {
-        const dialogRef = this.dialog.open(ClaimDetails, {
+    openActionDetails(action: Action | null): void {
+        const dialogRef = this.dialog.open(ActionDetails, {
             autoFocus: false,
-            data: reclamation ? { ...reclamation } : null,
+            data: action ? { ...action } : null,
         });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 if (result.id) {
-                    // Update existing reclamation
-                    this._claimService
-                        .updateClaim(result)
+                    // Update existing action
+                    this._actionService
+                        .updateAction(result)
                         .pipe(takeUntil(this.unsubscribeAll))
                         .subscribe((resultUpdates) => {
-                            this.loadReclamations();
+                            this.loadActions();
                         });
                 } else {
-                    // Create new reclamation
-                    this._claimService
-                        .addClaim(result)
+                    // Create new action
+                    this._actionService
+                        .addAction(result)
                         .pipe(takeUntil(this.unsubscribeAll))
                         .subscribe(() => {
-                            this.loadReclamations();
+                            this.loadActions();
                         });
                 }
             }
         });
     }
 
-    deleteReclamation(reclamation: Claim): void {
+    deleteAction(action: Action): void {
         const confirmDelete = window.confirm(
-            'Are you sure you want to delete this reclamation?'
+            'Are you sure you want to delete this action?'
         );
         if (confirmDelete) {
-            this._claimService
-                .delelte(reclamation.id)
+            this._actionService
+                .delelte(action.id)
                 .pipe(takeUntil(this.unsubscribeAll))
                 .subscribe((res) => {
-                    this.loadReclamations();
+                    this.loadActions();
                 });
         }
     }

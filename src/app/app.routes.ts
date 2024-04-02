@@ -163,6 +163,13 @@ export const appRoutes: Route[] = [
                                 'app/modules/admin/dashboards/Claim/claim.routes'
                             ),
                     },
+                    {
+                        path: 'action',
+                        loadChildren: () =>
+                            import(
+                                'app/modules/admin/dashboards/Action/action.routes'
+                            ),
+                    },
                 ],
             },
 
