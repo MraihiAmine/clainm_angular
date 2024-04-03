@@ -170,6 +170,13 @@ export const appRoutes: Route[] = [
                                 'app/modules/admin/dashboards/Action/action.routes'
                             ),
                     },
+                    {
+                        path: 'etablissement',
+                        loadChildren: () =>
+                            import(
+                                'app/modules/admin/dashboards/Etablissement/etablissement.routes'
+                            ),
+                    },
                 ],
             },
 

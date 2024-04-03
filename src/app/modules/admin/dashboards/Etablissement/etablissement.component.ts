@@ -4,9 +4,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Action } from './action.type';
-import { ActionService } from 'app/core/action/action.service';
-import { ActionDetails } from './details/details.component';
+import { Etablissement } from './etablissement.type';
+import { EtablissementService } from 'app/core/etablissement/etablissement.service';
+import { EtablissementDetails } from './details/details.component';
 import {
     NgIf,
     NgFor,
@@ -28,8 +28,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 
 @Component({
-    selector: 'app-action',
-    templateUrl: './action.component.html',
+    selector: 'app-etablissement',
+    templateUrl: './etablissement.component.html',
     standalone: true,
     styles: [
         /* language=SCSS */
@@ -88,19 +88,19 @@ import { MatSortModule } from '@angular/material/sort';
         CurrencyPipe,
     ],
 })
-export class ActionComponent implements OnInit, OnDestroy {
-    dataSource: MatTableDataSource<Action>;
-    displayedColumns: string[] = ['name', 'description', 'actions'];
+export class EtablissementComponent implements OnInit, OnDestroy {
+    dataSource: MatTableDataSource<Etablissement>;
+    displayedColumns: string[] = ['name', 'city', 'actions'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     private unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private dialog: MatDialog,
-        private _actionService: ActionService
+        private _etablissementService: EtablissementService
     ) {}
 
     ngOnInit(): void {
-        this.loadActions();
+        this.loadEtablissements();
     }
 
     ngOnDestroy(): void {
@@ -108,55 +108,57 @@ export class ActionComponent implements OnInit, OnDestroy {
         this.unsubscribeAll.complete();
     }
 
-    loadActions(): void {
-        this._actionService
-            .getActions()
+    loadEtablissements(): void {
+        this._etablissementService
+            .getEtablissements()
             .pipe(takeUntil(this.unsubscribeAll))
-            .subscribe((actions) => {
-                this.dataSource = new MatTableDataSource<Action>(actions);
+            .subscribe((etablissements) => {
+                this.dataSource = new MatTableDataSource<Etablissement>(
+                    etablissements
+                );
                 this.dataSource.paginator = this.paginator;
             });
     }
 
-    openActionDetails(action: Action | null): void {
-        const dialogRef = this.dialog.open(ActionDetails, {
+    openEtablissementDetails(etablissement: Etablissement | null): void {
+        const dialogRef = this.dialog.open(EtablissementDetails, {
             autoFocus: false,
-            data: action ? { ...action } : null,
+            data: etablissement ? { ...etablissement } : null,
         });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 if (result.id) {
-                    // Update existing action
-                    this._actionService
-                        .updateAction(result)
+                    // Update existing etablissement
+                    this._etablissementService
+                        .updateEtablissement(result)
                         .pipe(takeUntil(this.unsubscribeAll))
                         .subscribe((resultUpdates) => {
-                            this.loadActions();
+                            this.loadEtablissements();
                         });
                 } else {
-                    // Create new action
-                    this._actionService
-                        .addAction(result)
+                    // Create new etablissement
+                    this._etablissementService
+                        .addEtablissement(result)
                         .pipe(takeUntil(this.unsubscribeAll))
                         .subscribe(() => {
-                            this.loadActions();
+                            this.loadEtablissements();
                         });
                 }
             }
         });
     }
 
-    deleteAction(action: Action): void {
+    deleteEtablissement(etablissement: Etablissement): void {
         const confirmDelete = window.confirm(
-            'Are you sure you want to delete this action?'
+            'Are you sure you want to delete this etablissement?'
         );
         if (confirmDelete) {
-            this._actionService
-                .delelte(action.id)
+            this._etablissementService
+                .delelte(etablissement.id)
                 .pipe(takeUntil(this.unsubscribeAll))
                 .subscribe((res) => {
-                    this.loadActions();
+                    this.loadEtablissements();
                 });
         }
     }

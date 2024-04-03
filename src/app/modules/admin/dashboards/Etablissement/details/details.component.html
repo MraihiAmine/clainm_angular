@@ -1,0 +1,53 @@
+<div
+    *ngIf="!isLoading"
+    class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-160 -m-6 overflow-y-auto"
+>
+    <!-- Header -->
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary"
+    >
+        <div class="text-lg font-medium">Etablissement détails</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+
+    <!-- Action form -->
+    <form
+        class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
+        [formGroup]="EtablissementForm"
+    >
+        <!-- Name -->
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Cité</mat-label>
+            <input matInput formControlName="city" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+            <mat-label>Fax</mat-label>
+            <input matInput formControlName="fax" />
+        </mat-form-field>
+
+        <div class="w-full">
+            <!-- ActionEntities code here... -->
+        </div>
+    </form>
+</div>
+<form (ngSubmit)="submitForm()">
+    <!-- Your form controls here -->
+    <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!EtablissementForm.valid"
+    >
+        Submit
+    </button>
+</form>
